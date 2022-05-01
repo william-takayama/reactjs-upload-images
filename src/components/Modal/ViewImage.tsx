@@ -3,10 +3,11 @@ import {
   ModalOverlay,
   ModalContent,
   ModalFooter,
-  ModalBody,
   Image,
   Link,
+  Skeleton,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 
 interface ModalViewImageProps {
   isOpen: boolean;
@@ -19,5 +20,33 @@ export function ModalViewImage({
   onClose,
   imgUrl,
 }: ModalViewImageProps): JSX.Element {
-  // TODO MODAL WITH IMAGE AND EXTERNAL LINK
+  const [isLoading, setIsLoading] = useState(true);
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      isCentered
+      motionPreset="slideInBottom"
+    >
+      <ModalOverlay />
+
+      <ModalContent bgColor="pGray.800" minW={900} overflow="auto">
+        <Skeleton isLoaded={!isLoading}>
+          <Image
+            src={imgUrl}
+            onLoad={() => setIsLoading(false)}
+            h={600}
+            minW={900}
+            overflow="auto"
+          />
+        </Skeleton>
+        <ModalFooter px={2.5} py={2} justifyContent="flex-start">
+          <Link href={imgUrl} target="_blank">
+            Abrir original
+          </Link>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
 }
